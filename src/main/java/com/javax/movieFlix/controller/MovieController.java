@@ -30,10 +30,10 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieResponse> findByID(@PathVariable Long id){
-        Optional<Movie> optionalMovie = movieService.findByID(id);
-        return ResponseEntity.ok(optionalMovie.map(MovieMapper::toMovieResponse)
-                .orElse(null)
-        );
+        return movieService.findByID(id)
+                .map(movie -> ResponseEntity.ok(MovieMapper.toMovieResponse(movie)))
+                .orElse(ResponseEntity.notFound().build());
+
     }
 
     @PostMapping
