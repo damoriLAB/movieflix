@@ -27,6 +27,35 @@ public class MovieService {
     public Optional<Movie> findByID(Long id){ return movieRepository.findById(id); }
     public void deleteByID(Long id) { movieRepository.deleteById(id);}
 
+    public Optional<Movie> update(Long id, Movie movieUptaded){
+        Optional<Movie> optMovie = movieRepository.findById(id);
+
+        if(optMovie.isEmpty()) return optMovie;
+
+        List<Category> categories = findCategories(movieUptaded.getCategories());
+        List<Streaming> streamings = findStreamings(movieUptaded.getStreamings());
+
+
+        Movie movie = optMovie.get();
+
+        if(movieUptaded.getTitle() != null) movie.setTitle(movieUptaded.getTitle());
+        if(movieUptaded.getDescription() != null) movie.setDescription(movieUptaded.getDescription());
+        if(movieUptaded.getReleaseDate() != null) movie.setReleaseDate(movieUptaded.getReleaseDate());
+        if(movieUptaded.getRating() != movie.getRating()) movie.setRating(movieUptaded.getRating());
+
+        if(movieUptaded.getCategories() != null){
+            movie.getCategories().clear();
+            movie.getCategories().addAll(categories);
+        }
+
+        if(movieUptaded.getStreamings() != null){
+            movie.getStreamings().clear();
+            movie.getStreamings().addAll(streamings);
+        }
+
+        return Optional.of(movieRepository.save(movie));
+    }
+
     private List<Category> findCategories(List<Category> categories) {
         List<Category> categoriesFound = new ArrayList<>();
         categories
