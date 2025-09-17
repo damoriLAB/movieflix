@@ -1,5 +1,6 @@
 package com.javax.movieFlix.service;
 
+
 import com.javax.movieFlix.entity.Category;
 import com.javax.movieFlix.entity.Movie;
 import com.javax.movieFlix.entity.Streaming;
@@ -68,5 +69,9 @@ public class MovieService {
         streamings
                 .forEach(streaming -> streamingService.findByID(streaming.getId()).ifPresent(streamingsFound::add));
         return streamingsFound;
+    }
+
+    public List<Movie> findByCategory(Long categoryID){
+        return movieRepository.findMovieByCategories(List.of(Category.builder().id(categoryID).build()));
     }
 }
