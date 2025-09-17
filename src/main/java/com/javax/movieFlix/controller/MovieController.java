@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/movieflix/movie")
@@ -55,6 +55,14 @@ public class MovieController {
     public ResponseEntity<Void> deleteByID(@PathVariable Long id){
         movieService.deleteByID(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    public ResponseEntity<List<MovieResponse>> findByCategory(@RequestParam Long category){
+        return ResponseEntity.ok(movieService.findByCategory(category)
+                .stream()
+                .map(MovieMapper::toMovieResponse)
+                .toList()
+        );
     }
 
 
